@@ -1,5 +1,6 @@
 import requests
 import os.path
+import re
 from bs4 import BeautifulSoup
 
 repoPath = "D:\\cravi\\Documentsold\\Uni\\DH\\CompTextAna\\Testkorpus\\"
@@ -51,12 +52,8 @@ def prettifyContent(content):
     return content.text
 
 def formatTitle(title):
-    unwanted = '<>:"/\|?*'
-    title = title.text
-    for char in title:
-        if char in unwanted and char in title:
-            title.replace(char, "!")
-            print(title)
+    unwanted = r'<>:?"/\|*'
+    title = re.sub(r'[<>:?"/\|*]', "!", title.text)
     return title
     
 # start pulling from this link
