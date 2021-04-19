@@ -35,36 +35,3 @@ def getContent(link):
     
 
 collectLinks("https://de.wikipedia.org/wiki/Kategorie:Psychodrama")
-    
-
-
-
-# import requests
-# from bs4 import BeautifulSoup
-# import random
-# 
-# def scrapeWikiArticle(url):
-#     response = requests.get(url=url,)
-#     
-#     soup = BeautifulSoup(response.content, 'html.parser')
-# 
-#     title = soup.find(id="firstHeading")
-#     print(title.text)
-#     print(type(title))
-# 
-# 	allLinks = soup.find(id="bodyContent").find_all("a")
-# 	random.shuffle(allLinks)
-# 	linkToScrape = 0
-# 
-# 	for link in allLinks:
-# 		# We are only interested in other wiki articles
-# 		if link['href'].find("/wiki/") == -1: 
-# 			continue
-# 
-# 		# Use this link to scrape
-# 		linkToScrape = link
-# 		break
-# 
-# 	scrapeWikiArticle("https://de.wikipedia.org" + linkToScrape['href'])
-# 
-# scrapeWikiArticle("https://de.wikipedia.org/wiki/Requiem_for_a_Dream")
