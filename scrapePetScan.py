@@ -16,20 +16,20 @@ def collectLinks(url):
     response = requests.get(url=url,)
     soup = BeautifulSoup(response.content, "html.parser")
     
-    # get all links from categories page
-    allLinks = soup.find(id="main_table").find_all("a")
+    # get all links from categories table
+    all_links = soup.find(id="main_table").find_all("a")
     
     # get content for each link
-    for link in allLinks:
+    for link in all_links:
         # only /wiki/ links
         if link["href"].find("/wiki/") == -1:
             continue
-        # concat to full url
+        # pull content from href-attribute
         getContent(link["href"])
     else:
         print("Finished!")
 
-    
+
 def getContent(link):
     response = requests.get(url=link,)
     soup = BeautifulSoup(response.content, "html.parser")
@@ -42,19 +42,22 @@ def getContent(link):
     content = prettifyContent(soup.find(id="mw-content-text"))
     
     # write to file
-    outFile = open(os.path.join(repoPath, categoryName, title + ".txt"), "w", encoding="utf8")
-    outFile.write(content)
+    out_file = open(os.path.join(repoPath, categoryName, title + ".txt"), "w", encoding="utf8")
+    out_file.write(content)
     
-    outFile.close()
+    out_file.close()
     
-    
+
 def prettifyContent(content):
     return content.text
 
+
 def formatTitle(title):
-    unwanted = r'<>:?"/\|*'
-    title = re.sub(r'[<>:?"/\|*]', "!", title.text)
+    title = re.sub(r'[<>:?"/\\|*]', "!", title.text)
     return title
-    
+
+
 # start pulling from this link
-collectLinks("https://petscan.wmflabs.org/?ns[0]=1&ns[100]=1&project=wikipedia&categories=" + categoryName + "&depth=10&language=de&ns[6]=1&sortby=ns_title&interface_language=de&ns[10]=1&doit=&interface_language=de")
+collectLinks("https://petscan.wmflabs.org/?ns[0]=1&ns[100]=1&project=wikipedia&categories="
+             + categoryName +
+             "&depth=10&language=de&ns[6]=1&sortby=ns_title&interface_language=de&ns[10]=1&doit=&interface_language=de")
