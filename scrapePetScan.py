@@ -1,10 +1,11 @@
 import requests
 import os.path
 import re
+# from pathlib import Path
 from bs4 import BeautifulSoup
 
 repoPath = "D:\\cravi\\Documentsold\\Uni\\DH\\CompTextAna\\Testkorpus\\"
-categoryName = "Western"
+categoryName = input("Name der gewünschten Kategorie: ")
 
 try:
     os.mkdir(os.path.join(repoPath, categoryName))
@@ -42,10 +43,8 @@ def getContent(link):
     content = prettifyContent(soup.find(id="mw-content-text"))
     
     # write to file
-    out_file = open(os.path.join(repoPath, categoryName, title + ".txt"), "w", encoding="utf8")
-    out_file.write(content)
-    
-    out_file.close()
+    with open(os.path.join(repoPath, categoryName, title + ".txt"), "w", encoding="utf8") as out_file:
+        out_file.write(content)
     
 
 def prettifyContent(content):
