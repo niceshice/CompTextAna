@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 
 repoPath = "D:\\cravi\\Documentsold\\Uni\\DH\\CompTextAna\\Testkorpus\\"
 # TODO: make it an input, for dynamic category search
-categoryName = "Western"
+categoryName = input("gib Kategorie: ")
 
 try:
     os.mkdir(os.path.join(repoPath, categoryName))
