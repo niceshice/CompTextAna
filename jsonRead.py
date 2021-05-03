@@ -7,5 +7,5 @@ def read(doc):
         return output
 
 
-string = read(r"D:\cravi\Documentsold\Uni\DH\CompTextAna\Korpus\Thriller\13_sins.json")
-print(string)
+# string = read(r"D:\cravi\Documentsold\Uni\DH\CompTextAna\KorpusAlt\Thriller\13_sins.json")
+# print(string)

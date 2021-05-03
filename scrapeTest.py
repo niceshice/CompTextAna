@@ -2,7 +2,7 @@ import requests
 import os.path
 from bs4 import BeautifulSoup
 
-repoPath = "D:\\cravi\\Documentsold\\Uni\\DH\\CompTextAna\\Korpus\\"
+repoPath = "D:\\cravi\\Documentsold\\Uni\\DH\\CompTextAna\\KorpusAlt\\"
 categoryName = "Doku-Drama"
 
 try:

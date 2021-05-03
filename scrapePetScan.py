@@ -7,13 +7,15 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 
 repoPath = r"./Korpus/"
-# TODO: make it an input, for dynamic category search
+# input for dynamic category search
 categoryName = input("gib Kategorie: ")
 
-try:
-    os.mkdir(os.path.join(repoPath, categoryName))
-except OSError as error:
-    print(error)
+# try:
+#     os.mkdir(os.path.join(repoPath, categoryName))
+# except OSError as error:
+#     print(error)
+
+# notes: identifiers += filenames, join via db
 
 
 def collectLinks(url):
@@ -38,7 +40,6 @@ def getContent(link):
     response = requests.get(url=link, )
     soup = BeautifulSoup(response.content, "html.parser")
 
-
     # get title
     title = soup.find(id="firstHeading")
     # format for filename
@@ -46,20 +47,22 @@ def getContent(link):
     # TODO: remove, only for logging
     print(title_f)
 
-    if title_f not in os.listdir(os.path.join(repoPath, categoryName)):
+    if title_f not in os.listdir(repoPath):
         # get text content and prettify
         content = makeJSON(soup.find(id="mw-content-text"), link, title.text)
 
         # write to file
-        with open(os.path.join(repoPath, categoryName, title_f + ".json"), "w", encoding="utf8") as out_file:
+        with open(os.path.join(repoPath, title_f + ".json"), "w", encoding="utf8") as out_file:
             out_file.write(content)
 
 
 def makeJSON(content, link, title):
-    # make dict with scrape datetime, source(link), title and text content
+    # make dict with scrape datetime, source(link), title, category and text content
+    # TODO add metadata from wikidata
     outdict = {"date": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
                "link": link,
                "title": title,
+               "category": categoryName,
                "text": filterTextOnly(content)
                }
     return json.dumps(outdict, indent=4)
@@ -71,7 +74,7 @@ def filterTextOnly(content):
     out_l = content.find_all("p")
     for item in out_l:
         out_s = out_s + item.text
-    out_s = re.sub(r"\[[0-9]\]", "", out_s)
+    out_s = re.sub(r"\[[0-9]]", "", out_s)
     return out_s
 
 
