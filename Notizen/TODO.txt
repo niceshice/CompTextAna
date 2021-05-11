@@ -1,0 +1,9 @@
+informationen in folien:
+	gesamttokenzahl (mit satzzeichen) --> TBD
+	hauptpartitionierung (welche untersuchungsperspektive, gattung?, unterteilung) --> TBD
+	verteilung der token über partitionierung --> TBD
+	welche metadaten? --> Herkunftsland (country of origin), Erscheinungsdatum (publication date), Komponist (composer), Erzählort (narrative 				location), Cast (cast members), Länge (duration), FSK film rating (same), director, screenwriter, Q-Nummer/ISAN
+	Provenienz (woher?) --> Wikipedia, Wikidata
+	Forschungsperspektiven --> topic modelling, Cast Members (wer ist Hauptfigur z.B.), FSK Ratings nach Herkunftsland/Genre, Genre 				nach Herkunftsland, Erzählort
+	
+3 Texte vektorisieren, plotten
