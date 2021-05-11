@@ -27,6 +27,7 @@ for doc in indexingList:
         for item in docset:
             # appends index of currently iterated doc as value to the currently iterated type in current doc
             indexDict[f"{item}"].append(indexingList.index(doc))
+            print("appended", indexingList.index(doc), "to", item)
 
 # writes posting list to file
 with open(r"./postingList.txt", "w", encoding="utf8") as f:
