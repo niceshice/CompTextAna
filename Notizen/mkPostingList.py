@@ -25,10 +25,8 @@ for doc in indexingList:
         docset = tokenize(f.read())
         # iterate current document types
         for item in docset:
-            # iterates the type list of all documents in folder
-            if item in helpList:
-                # appends index of currently iterated doc as value to the currently iterated type in current doc
-                indexDict[f"{item}"].append(indexingList.index(doc))
+            # appends index of currently iterated doc as value to the currently iterated type in current doc
+            indexDict[f"{item}"].append(indexingList.index(doc))
 
 # writes posting list to file
 with open(r"./postingList.txt", "w", encoding="utf8") as f:
