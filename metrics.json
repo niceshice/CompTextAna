@@ -1,0 +1,42 @@
+{
+    "Splatterfilm": {
+        "amount": 236,
+        "size": 1404360,
+        "tokens": 220414
+    },
+    "Roadmovie": {
+        "amount": 341,
+        "size": 2011009,
+        "tokens": 314095
+    },
+    "Martial-Arts-Film": {
+        "amount": 254,
+        "size": 1089947,
+        "tokens": 168474
+    },
+    "Agentenfilm": {
+        "amount": 421,
+        "size": 3013208,
+        "tokens": 471086
+    },
+    "Heimatfilm": {
+        "amount": 312,
+        "size": 1696289,
+        "tokens": 271089
+    },
+    "Weihnachtsfilm": {
+        "amount": 488,
+        "size": 2627482,
+        "tokens": 408826
+    },
+    "M\u00e4rchenfilm": {
+        "amount": 392,
+        "size": 2424317,
+        "tokens": 380228
+    },
+    "total": {
+        "amount": 2444,
+        "size": 14266612,
+        "tokens": 2234212
+    }
+}
