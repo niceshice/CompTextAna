@@ -51,5 +51,5 @@ get_size()
 get_tokens()
 get_total()
 
-with open("./metrics.json", "w", encoding="utf8") as f:
+with open("./data/metrics.json", "w", encoding="utf8") as f:
     f.write(json.dumps(outcol, indent=4))
