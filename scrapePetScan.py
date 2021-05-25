@@ -74,7 +74,7 @@ def filterTextOnly(content):
     out_l = content.find_all("p")
     for item in out_l:
         out_s = out_s + item.text
-    out_s = re.sub(r"\[[0-9]]", "", out_s)
+    out_s = re.sub(r"\[.+]", "", out_s)             # filter all annotations
     return out_s
 
 
