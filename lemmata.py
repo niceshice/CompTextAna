@@ -15,5 +15,5 @@ outlist = []
 outlist.extend(out)
 outlist.sort()
 
-with open("./data/lemmata.json", "w", encoding="utf8") as f:
+with open("./data/lemmata2.json", "w", encoding="utf8") as f:
     f.write(json.dumps(outlist))
