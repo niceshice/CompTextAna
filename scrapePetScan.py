@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 
 repoPath = r"./Korpus/"
 # input for dynamic category search
-categoryName = input("gib Kategorie: ")
+# categoryName = input("gib Kategorie: ")
 
 # try:
 #     os.mkdir(os.path.join(repoPath, categoryName))
@@ -49,21 +49,21 @@ def getContent(link):
 
     if title_f not in os.listdir(repoPath):
         # get text content and prettify
-        content = makeJSON(soup.find(id="mw-content-text"), link, title.text)
+        content = makeJSON(soup, link, title.text)
 
         # write to file
         with open(os.path.join(repoPath, title_f + ".json"), "w", encoding="utf8") as out_file:
             out_file.write(content)
 
 
-def makeJSON(content, link, title):
+def makeJSON(soup, link, title):
     # make dict with scrape datetime, source(link), title, category and text content
     # TODO add metadata from wikidata
     outdict = {"date": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
                "link": link,
                "title": title,
                "category": categoryName,
-               "text": filterTextOnly(content)
+               "text": filterHandlungOnly(soup)
                }
     return json.dumps(outdict, indent=4)
 
@@ -77,6 +77,23 @@ def filterTextOnly(content):
     out_s = re.sub(r"\[.+]", "", out_s)             # filter all annotations
     return out_s
 
+def filterHandlungOnly(soup):
+    try:
+        out_s = ""
+        iter_p = soup.find("span", {"id": "Handlung"}).parent.find_next_sibling("p")
+        if iter_p is None:
+            iter_p = soup.find("span", {"id": "Inhalt"}).parent.find_next_sibling("p")
+        if iter_p is None:
+            iter_p = soup.find("span", {"id": "Hintergrund_und_Handlung"}).parent.find_next_sibling("p")
+        out_s += iter_p.text
+        while True:
+            iter_p = iter_p.find_next_sibling()
+            if iter_p.name == "h2":
+                break
+            out_s += iter_p.text
+        return out_s
+    except:
+        return ""
 
 def formatTitle(title):
     title = title.text.casefold()
@@ -86,6 +103,19 @@ def formatTitle(title):
 
 
 # start pulling from this link
-collectLinks("https://petscan.wmflabs.org/?ns[0]=1&ns[100]=1&project=wikipedia&categories="
+categories = ["Splatterfilm", "Roadmovie", "Heimatfilm", "Märchenfilm", "Agentenfilm", "Weihnachtsfilm", "Martial-Arts-Film"]
+for categoryName in categories:
+    collectLinks("https://petscan.wmflabs.org/?ns[0]=1&ns[100]=1&project=wikipedia&categories="
              + categoryName +
              "&depth=10&language=de&ns[6]=1&sortby=ns_title&interface_language=de&ns[10]=1&doit=&interface_language=de")
+
+# precede document with unique index
+for i, item in enumerate(os.listdir("./Korpus")):
+    os.rename(f'./Korpus/{item}', f'./Korpus/' + str(i).zfill(4) + "_" + item)
+
+# filter all texts in different folder
+# for i, item in enumerate(os.listdir("./Korpus/")):
+#     with open(f"./Korpus/{item}", "r", encoding="utf8")as f:
+#         out = json.loads(f.read())["text"]
+#         with open(f"./Korpus_texte/{item}", "w", encoding="utf8")as f2:
+#             f2.write(out)
