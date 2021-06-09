@@ -4,7 +4,7 @@ import spacy
 from tqdm import tqdm
 
 nlp = spacy.load("de_core_news_sm")
-repo = "./Korpus"
+repo = "./Korpus/"
 outcol = {"Splatterfilm": {"amount": 0, "size": 0, "tokens": 0},
           "Roadmovie": {"amount": 0, "size": 0, "tokens": 0},
           "Martial-Arts-Film": {"amount": 0, "size": 0, "tokens": 0},
@@ -17,7 +17,7 @@ outcol = {"Splatterfilm": {"amount": 0, "size": 0, "tokens": 0},
 
 def get_amount():
     for file in tqdm(os.listdir(repo), desc="raw amount"):
-        with open(rf"./Korpus/{file}", "r", encoding="utf8") as f:
+        with open(rf"{repo}{file}", "r", encoding="utf8") as f:
             temp = json.loads(f.read())
             outcol[temp['category']]['amount'] += 1
 
