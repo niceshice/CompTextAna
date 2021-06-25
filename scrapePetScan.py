@@ -62,10 +62,11 @@ def makeJSON(soup, link, title):
     # TODO add metadata from wikidata
     outdict = {"date": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
                "link": link,
-               "title": title,
+               #"title": title,
                "category": categoryName,
                "text": filterHandlungOnly(soup)
                }
+    outdict.update(findMetaData(soup))
     return json.dumps(outdict, indent=4)
 
 
@@ -77,6 +78,7 @@ def filterTextOnly(content):
         out_s = out_s + item.text
     out_s = re.sub(r"\[.+]", "", out_s)             # filter all annotations
     return out_s
+
 
 def filterHandlungOnly(soup):
     try:
@@ -96,28 +98,27 @@ def filterHandlungOnly(soup):
     except:
         return ""
 
-def formatTitle(title):
-    title = title.text.casefold()
-    title = re.sub(r'[<>:?"/\\|*]', "!", title)
-    title = re.sub(r'\s', '_', title)
-    return title
 
-def getMetaData(soup, title):
-    # country of origin, publication date, director, production company, filming location, FSK film rating(??)
+def findMetaData(soup):
+    id_art = re.findall("Q\d+", soup.find(id="t-wikibase").find("a")["href"])[0]
+    meta_json = requests.get(f"https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids={id_art}").json()
+    retdict = defaultdict()
+    retdict["title"] = meta_json["entities"][id_art]["labels"]["de"]["value"]
+
     id_dict = {"P495": "Ursprungsland",
                "P577": "Veröffentlichungsdatum",
                "P57": "Regisseur",
                "P272": "Produktionsgesellschaft",
                "P915": "Drehort",
                "P1981": "FSK-Altersfreigabe"}
-
-    # get wikidata object from identifier (see other version)
-    # here like requests.get(f"https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids={identifier}").json()
-
+    # maybe add title from here
     for item in id_dict.keys():
         retdict = defaultdict()
         # wikidata api call
+
         try:
+            # maybe try if ["entity-type"] = item then go deeper
+            item_id = meta_json["entities"][id_art]["claims"][item]["0"]["mainsnak"]
             retdict[id_dict[item]] = requests.get(f"https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids={item}").json()["entities"][item]["labels"]["de"]["value"]
         except KeyError:
             print("no value found for ", id_dict[item])
@@ -125,6 +126,14 @@ def getMetaData(soup, title):
         finally:
             print("something went wrong collecting metadata")
     return retdict
+
+
+def formatTitle(title):
+    title = title.text.casefold()
+    title = re.sub(r'[<>:?"/\\|*]', "!", title)
+    title = re.sub(r'\s', '_', title)
+    return title
+
 
 # start pulling from this link
 categories = ["Splatterfilm", "Roadmovie", "Heimatfilm", "Märchenfilm", "Agentenfilm", "Weihnachtsfilm", "Martial-Arts-Film"]
