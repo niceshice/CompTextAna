@@ -2,6 +2,7 @@ import requests
 import os.path
 import re
 import json
+from collections import defaultdict
 from datetime import datetime
 # from pathlib import Path
 from bs4 import BeautifulSoup
@@ -103,19 +104,26 @@ def formatTitle(title):
 
 def getMetaData(soup, title):
     # country of origin, publication date, director, production company, filming location, FSK film rating(??)
-    id_dict = {"P495" : "Ursprungsland",
-               "P577" : "Veröffentlichungsdatum",
-               "P57" : "Regisseur",
-               "P272" : "Produktionsgesellschaft",
-               "P915" : "Drehort",
-               "P1981" : "FSK-Altersfreigabe"}
+    id_dict = {"P495": "Ursprungsland",
+               "P577": "Veröffentlichungsdatum",
+               "P57": "Regisseur",
+               "P272": "Produktionsgesellschaft",
+               "P915": "Drehort",
+               "P1981": "FSK-Altersfreigabe"}
 
     # get wikidata object from identifier (see other version)
     # here like requests.get(f"https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids={identifier}").json()
 
     for item in id_dict.keys():
+        retdict = defaultdict()
         # wikidata api call
-        retdict[id_dict[item]] = requests.get(f"https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids={item}").json()["entities"][item]["labels"]["de"]["value"]
+        try:
+            retdict[id_dict[item]] = requests.get(f"https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids={item}").json()["entities"][item]["labels"]["de"]["value"]
+        except KeyError:
+            print("no value found for ", id_dict[item])
+            continue
+        finally:
+            print("something went wrong collecting metadata")
     return retdict
 
 # start pulling from this link
